@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CallingActivtiy">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/purple_200">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consCalling"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            app:layout_constraintBottom_toTopOf="@+id/consIconsRow1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_calling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calling"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_callingNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+92316876542"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_calling" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consIconsRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/consCalling">
+
+            <ImageButton
+                android:id="@+id/ImgMute"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/bg_shape"
+                android:src="@drawable/ic_mute"
+                app:layout_constraintEnd_toStartOf="@+id/ImgKeypad"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:text="mute"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ImgMute"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute" />
+
+            <ImageButton
+                android:id="@+id/ImgKeypad"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/bg_shape"
+                android:src="@drawable/ic_keypad"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ImgMute"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvKeyPad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Keypad"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ImgKeypad"
+                app:layout_constraintStart_toStartOf="@+id/ImgKeypad"
+                app:layout_constraintTop_toBottomOf="@+id/ImgKeypad" />
+
+            <ImageButton
+                android:id="@+id/ImgAudio"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/bg_shape"
+                android:src="@drawable/ic_audio"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ImgKeypad"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:text="audio"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ImgAudio"
+                app:layout_constraintStart_toStartOf="@+id/ImgAudio"
+                app:layout_constraintTop_toBottomOf="@+id/ImgAudio" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consIconsRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/consIconsRow1">
+
+            <ImageButton
+                android:id="@+id/ImgAddCall"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/bg_shape"
+                android:src="@drawable/ic_addcall"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAddCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="add call"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ImgAddCall"
+                app:layout_constraintStart_toStartOf="@+id/ImgAddCall"
+                app:layout_constraintTop_toBottomOf="@+id/ImgAddCall" />
+
+            <ImageButton
+                android:id="@+id/ImgHold"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/bg_shape"
+                android:src="@drawable/ic_hold"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ImgAddCall"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvHold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:text="hold"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ImgHold"
+                app:layout_constraintStart_toStartOf="@+id/ImgHold"
+                app:layout_constraintTop_toBottomOf="@+id/ImgHold" />
+
+            <ImageButton
+                android:id="@+id/ImgBluetooth"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:background="@drawable/bg_shape"
+                android:src="@drawable/ic_bluetooth"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ImgHold"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvBluetooth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="bluetooth"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ImgBluetooth"
+                app:layout_constraintStart_toStartOf="@+id/ImgBluetooth"
+                app:layout_constraintTop_toBottomOf="@+id/ImgBluetooth" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consDial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/consIconsRow2">
+
+            <ImageButton
+                android:id="@+id/ImgMute3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_shape2"
+                android:src="@drawable/ic_dial"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
