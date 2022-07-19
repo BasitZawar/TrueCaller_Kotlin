@@ -1,7 +1,6 @@
 package com.lads.truecaller.activities
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.role.RoleManager
 import android.content.ActivityNotFoundException
@@ -31,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var telecomManager: TelecomManager
 
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,6 +45,14 @@ class MainActivity : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 0)
         }
+//        checkDefaultDialer()
+        if (isDefaultDialer()) {
+            launchSetDefaultDialerIntent()
+//            Toast.makeText(this, "if part is running", Toast.LENGTH_SHORT).show()
+        } else {
+//            Toast.makeText(this, "else part is running", Toast.LENGTH_SHORT).show()
+        }
+
         binding.bottomNavigatinView.setOnNavigationItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.favourite -> {
@@ -66,16 +74,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStart() {
         super.onStart()
 //        checkDefaultDialer()
-        if (isDefaultDialer()){
-            Toast.makeText(this, "if part is running", Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(this, "else part is running", Toast.LENGTH_SHORT).show()
-        }
-        isDefaultDialer()
-        checkDefaultDialer()
+//        if (isDefaultDialer()) {
+//            Toast.makeText(this, "if part is running", Toast.LENGTH_SHORT).show()
+//        } else {
+//            Toast.makeText(this, "else part is running", Toast.LENGTH_SHORT).show()
+//        }
+
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -85,45 +94,47 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    @SuppressLint("ServiceCast")
-    private fun checkDefaultDialer() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+    val REQUEST_CODE_SET_DEFAULT_DIALER = 200
 
-        val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
-        val isAlreadyDefaultDialer = packageName == telecomManager.defaultDialerPackage
-        if (isAlreadyDefaultDialer) return
+//    private fun checkDefaultDialer() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+//            return
+//
+//        val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
+//        val isAlreadyDefaultDialer = packageName == telecomManager.defaultDialerPackage
+//        if (isAlreadyDefaultDialer)
+//            return
+//        val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
+//            .putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, packageName)
+//        startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_DIALER)
+//    }
 
-        val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
-            .putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, packageName)
-        startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_DIALER)
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        when (requestCode) {
+//            REQUEST_CODE_SET_DEFAULT_DIALER -> checkSetDefaultDialerResult(resultCode)
+//        }
+//    }
 
-    private fun checkSetDefaultDialerResult(resultCode: Int) {
-        val message = when (resultCode) {
-            RESULT_OK -> "User accepted request to become default dialer"
-            RESULT_CANCELED -> "User declined request to become default dialer"
-            else -> "Unexpected result code $resultCode"
-        }
-
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_SET_DEFAULT_DIALER -> checkSetDefaultDialerResult(resultCode)
-        }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_SET_DEFAULT_DIALER = 123
-    }
+//    private fun checkSetDefaultDialerResult(resultCode: Int) {
+//        val message = when (resultCode) {
+//            RESULT_OK -> "User accepted request to become default dialer"
+//            RESULT_CANCELED -> "User declined request to become default dialer"
+//            else -> "Unexpected result code $resultCode"
+//        }
+//
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//
+//    }
+//
+//    companion object {
+//        private const val REQUEST_CODE_SET_DEFAULT_DIALER = 123
+//    }
 
     @TargetApi(Build.VERSION_CODES.M)
     fun Context.isDefaultDialer(): Boolean {
         return if (!packageName.startsWith("com.lads.truecaller.id.contacts") && !packageName.startsWith(
-                "com.phone.dialer.caller.id"
+                "com.lads.truecaller.id.dialer"
             )
         ) {
             true
@@ -139,7 +150,6 @@ class MainActivity : AppCompatActivity() {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && telecomManager.defaultDialerPackage == packageName
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun launchSetDefaultDialerIntent() {

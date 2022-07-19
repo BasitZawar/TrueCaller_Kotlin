@@ -218,7 +218,7 @@
             app:layout_constraintTop_toBottomOf="@+id/consIconsRow2">
 
             <ImageButton
-                android:id="@+id/ImgMute3"
+                android:id="@+id/btnEndCall"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="16dp"
