@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var telecomManager: TelecomManager
 
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,6 +160,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
                 startActivityForResult(intent, 1010)
+
             }
         } else {
             Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER).putExtra(

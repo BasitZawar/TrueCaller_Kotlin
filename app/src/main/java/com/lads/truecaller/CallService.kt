@@ -2,23 +2,16 @@ package com.lads.truecaller
 
 import android.telecom.Call
 import android.telecom.InCallService
+import com.lads.truecaller.activities.CallingActivtiy
 
 class CallService : InCallService() {
 
     override fun onCallAdded(call: Call) {
-        super.onCallAdded(call)
-        call.registerCallback(callCallback)
-        // We can start here our call Activity
+        OngoingCall.call = call
+        CallingActivtiy.start(this, call)
     }
 
     override fun onCallRemoved(call: Call) {
-        super.onCallRemoved(call)
-        call.unregisterCallback(callCallback)
-    }
-
-    private val callCallback = object : Call.Callback() {
-        override fun onStateChanged(call: Call, state: Int) {
-            // Send updates to the activity
-        }
+        OngoingCall.call = null
     }
 }
