@@ -23,11 +23,12 @@ import com.lads.truecaller.Fragments.RecentFragment
 import com.lads.truecaller.R
 import com.lads.truecaller.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var telecomManager: TelecomManager
+    private val PERMISSION_REQ_ID = 22
+
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,15 +36,61 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Call_Phone permission
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CALL_PHONE
-            ) != PackageManager.PERMISSION_GRANTED
+        val REQUESTED_PERMISSIONS = arrayOf(
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_CONTACTS
+        )
 
-        ) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 0)
+        //Call_Phone permission
+        val permissionGranted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CALL_PHONE
+        ) != PackageManager.PERMISSION_GRANTED
+        if (permissionGranted) {
+            ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_REQ_ID)
+        } else {
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
         }
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.CALL_PHONE
+//            ) != PackageManager.PERMISSION_GRANTED
+//
+//        ) {
+//         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 0)
+//        }
+
+        binding.bottomNavigatinView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.favourite -> {
+                    loadFragment(FavouriteFragment())
+                    Toast.makeText(this, "Favourite", Toast.LENGTH_SHORT).show()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.recent -> {
+                    loadFragment(RecentFragment())
+                    Toast.makeText(this, "Recent", Toast.LENGTH_SHORT).show()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.contact -> {
+                    loadFragment(ContactsFragment())
+                    Toast.makeText(this, "Contacts", Toast.LENGTH_SHORT).show()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.keypad -> {
+                    loadFragment(KeypadFragment())
+                    return@setOnItemSelectedListener true
+                }
+                else -> {
+                    return@setOnItemSelectedListener false
+                }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun onStart() {
+        super.onStart()
 //        checkDefaultDialer()
         if (isDefaultDialer()) {
             launchSetDefaultDialerIntent()
@@ -51,38 +98,6 @@ class MainActivity : AppCompatActivity() {
         } else {
 //            Toast.makeText(this, "else part is running", Toast.LENGTH_SHORT).show()
         }
-
-        binding.bottomNavigatinView.setOnNavigationItemReselectedListener { item ->
-            when (item.itemId) {
-                R.id.favourite -> {
-                    loadFragment(FavouriteFragment())
-                    Toast.makeText(this, "Favourite", Toast.LENGTH_SHORT).show()
-                }
-                R.id.recent -> {
-                    loadFragment(RecentFragment())
-                    Toast.makeText(this, "Recent", Toast.LENGTH_SHORT).show()
-                }
-                R.id.contact -> {
-                    loadFragment(ContactsFragment())
-                    Toast.makeText(this, "Contacts", Toast.LENGTH_SHORT).show()
-                }
-                R.id.keypad -> {
-                    loadFragment(KeypadFragment())
-                }
-            }
-        }
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    override fun onStart() {
-        super.onStart()
-//        checkDefaultDialer()
-//        if (isDefaultDialer()) {
-//            Toast.makeText(this, "if part is running", Toast.LENGTH_SHORT).show()
-//        } else {
-//            Toast.makeText(this, "else part is running", Toast.LENGTH_SHORT).show()
-//        }
 
     }
 
@@ -176,6 +191,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
 }

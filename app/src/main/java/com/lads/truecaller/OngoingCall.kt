@@ -32,4 +32,12 @@ object OngoingCall {
     fun hangup() {
         call!!.disconnect()
     }
+
+    fun onHold() {
+        call!!.hold()
+    }
+
+    fun unHold() {
+        call!!.unhold()
+    }
 }

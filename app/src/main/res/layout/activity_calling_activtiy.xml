@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.CallingActivtiy">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +25,7 @@
                 android:id="@+id/tv_calling"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calling"
+                android:text=""
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -35,12 +36,23 @@
                 android:id="@+id/tv_callingNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+92316876542"
+                android:text=""
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_calling" />
+            <TextView
+                android:id="@+id/tv_Timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/white"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_callingNumber" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -210,7 +222,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consDial"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -226,8 +238,21 @@
                 android:src="@drawable/ic_dial"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnReceive_Call"
+                tools:ignore="MissingConstraints" />
+
+            <ImageButton
+                android:id="@+id/btnReceive_Call"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_shaperec"
+                android:src="@drawable/ic_dial"
+                app:layout_constraintBottom_toBottomOf="@+id/btnEndCall"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/btnEndCall"
+                app:layout_constraintTop_toTopOf="@+id/btnEndCall" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
