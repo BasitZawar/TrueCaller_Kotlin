@@ -23,6 +23,7 @@ import com.lads.truecaller.Fragments.RecentFragment
 import com.lads.truecaller.R
 import com.lads.truecaller.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -38,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 
         val REQUESTED_PERMISSIONS = arrayOf(
             Manifest.permission.CALL_PHONE,
-            Manifest.permission.READ_CONTACTS
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.READ_CALL_LOG,
         )
-
         //Call_Phone permission
         val permissionGranted = ContextCompat.checkSelfPermission(
             this,
@@ -51,15 +52,20 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
         }
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_CALL_LOG),
+            PackageManager.PERMISSION_GRANTED
+        )
+
 //        if (ContextCompat.checkSelfPermission(
 //                this,
 //                Manifest.permission.CALL_PHONE
 //            ) != PackageManager.PERMISSION_GRANTED
-//
 //        ) {
 //         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 0)
 //        }
-
         binding.bottomNavigatinView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.favourite -> {

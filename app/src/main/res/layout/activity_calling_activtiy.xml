@@ -15,7 +15,7 @@
             android:id="@+id/consCalling"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             app:layout_constraintBottom_toTopOf="@+id/consIconsRow1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,11 +42,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_calling" />
+
             <TextView
                 android:id="@+id/tv_Timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="00:00:00"
                 android:textColor="@color/white"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -233,19 +234,17 @@
                 android:id="@+id/btnEndCall"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/bg_shape2"
                 android:src="@drawable/ic_dial"
+                app:layout_constraintEnd_toStartOf="@+id/btnReceive_Call"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnReceive_Call"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="@+id/btnReceive_Call" />
 
             <ImageButton
                 android:id="@+id/btnReceive_Call"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/bg_shaperec"
                 android:src="@drawable/ic_dial"
                 app:layout_constraintBottom_toBottomOf="@+id/btnEndCall"
