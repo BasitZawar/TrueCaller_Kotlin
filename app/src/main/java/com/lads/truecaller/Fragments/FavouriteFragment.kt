@@ -1,60 +1,65 @@
 package com.lads.truecaller.Fragments
 
+import android.database.Cursor
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
+import android.widget.SimpleCursorAdapter
+import androidx.fragment.app.Fragment
 import com.lads.truecaller.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavouriteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FavouriteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var listViewFavoriteContacts: ListView
+    var projection = arrayOf(
+        ContactsContract.Contacts._ID,
+        ContactsContract.Contacts.DISPLAY_NAME,
+        ContactsContract.Contacts.STARRED
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourite, container, false)
+        val view = inflater.inflate(R.layout.fragment_favourite, container, false)
+        listViewFavoriteContacts = view.findViewById(R.id.listViewFavoriteContacts)
+
+        displayFavoriteContacts()
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavouriteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavouriteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun displayFavoriteContacts() {
+
+        val to =
+            intArrayOf(R.id.recentContactNumber, R.id.recentContactName)
+
+
+        val cursor: Cursor = requireActivity().managedQuery(
+            ContactsContract.Contacts.CONTENT_URI,
+            projection,
+            "starred=?",
+            arrayOf("1"),
+            "${ContactsContract.Contacts.STARRED} DESC"
+        )
+
+
+        var adapter = SimpleCursorAdapter(
+            context,
+            R.layout.itemview_layout_favorite_contacts,
+            cursor,
+            projection,
+            to,
+            0
+        )
+        listViewFavoriteContacts.adapter = adapter
     }
+
+    companion object {}
 }

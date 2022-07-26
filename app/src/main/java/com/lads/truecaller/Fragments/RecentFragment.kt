@@ -1,5 +1,6 @@
 package com.lads.truecaller.Fragments
 
+import android.annotation.SuppressLint
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.lads.truecaller.R
 
+
 //import kotlinx.android.synthetic.main.fragment_recent.*
 
 class RecentFragment : Fragment() {
@@ -21,13 +23,13 @@ class RecentFragment : Fragment() {
     var cols = arrayListOf<String>(
         CallLog.Calls._ID,
         CallLog.Calls.TYPE,
+        CallLog.Calls.CACHED_NAME,
         CallLog.Calls.DURATION, CallLog.Calls.DATE, CallLog.Calls.NUMBER
     ).toTypedArray()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -36,17 +38,19 @@ class RecentFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_recent, container, false)
         listViewRecentContacts = view?.findViewById(R.id.listViewRecentContacts)!!
-
         displayLog()
-        // Inflate the layout for this fragment
+
         return view
     }
 
+    @SuppressLint("Range")
     private fun displayLog() {
 
         var from = arrayListOf<String>(
+            CallLog.Calls.CACHED_NAME,
             CallLog.Calls.NUMBER,
-            CallLog.Calls.DURATION,
+//          CallLog.Calls.DATE,
+//          CallLog.Calls.DURATION,
             CallLog.Calls.TYPE
         ).toTypedArray()
 
@@ -56,13 +60,9 @@ class RecentFragment : Fragment() {
             CallLog.Calls.CONTENT_URI,
             cols as Array<out String>?, null, null, "${CallLog.Calls.LAST_MODIFIED} DESC"
         )
-
         var adapter = SimpleCursorAdapter(context, R.layout.cardview_recentcalllog, rs, from, to, 0)
-
         listViewRecentContacts.adapter = adapter
     }
-
-    companion object {}
-
-
 }
+
+
