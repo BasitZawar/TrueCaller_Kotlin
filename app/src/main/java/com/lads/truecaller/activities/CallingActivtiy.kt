@@ -15,10 +15,10 @@ import android.telecom.Call
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.lads.truecaller.OngoingCall
-import com.lads.truecaller.R
 import com.lads.truecaller.TimerService
 import com.lads.truecaller.asString
 import com.lads.truecaller.interfaces.ApiInterface
@@ -39,27 +39,29 @@ class CallingActivtiy : AppCompatActivity() {
     private val disposables = CompositeDisposable()
     private lateinit var number: String
     private lateinit var context: Context
+    private var myStringBuilder = StringBuilder()
+    private var dialog: AlertDialog? = null
+    private var timerStarted = false
+    private var isMute = false
+    private var isHold = false
+    private var isMicOn = false
+    private lateinit var serviceIntent: Intent
+    private var time = 0.0
 
     //    val BASE_URL = "https://jsonplaceholder.typicode.com/"
     val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
 
-    private var timerStarted = false
-    private lateinit var serviceIntent: Intent
-    private var time = 0.0
-
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calling_activtiy)
+        setContentView(com.lads.truecaller.R.layout.activity_calling_activtiy)
         number = intent.data!!.schemeSpecificPart
         tv_Timer.isVisible = false
 
         serviceIntent = Intent(applicationContext, TimerService::class.java)
         registerReceiver(updateTime, IntentFilter(TimerService.TIMER_UPDATED))
-        getMyData()
-
+//        getMyData()
     }
 
     private fun getMyData() {
@@ -76,14 +78,15 @@ class CallingActivtiy : AppCompatActivity() {
                 response: Response<List<ApiDataItem>>
             ) {
 //                try {
-                val myStringBuilder = StringBuilder()
+//                 myStringBuilder = StringBuilder()
                 val responseBody = response.body()
                 if (responseBody != null) {
+
+
                     for (myData in responseBody) {
-                        //myStringBuilder.append(myData.id)
-                        myStringBuilder.append(+myData.id)
-                        //myStringBuilder.append("\n")
-                        Log.i(TAG, "onResponse try: Just for checking")
+                        myStringBuilder!!.append(+myData.id)
+//                        myStringBuilder.append("userId"+myData.userId)
+                        Log.d(TAG, "onResponse: data$myStringBuilder \n")
                         tv_calling.text = myStringBuilder
                     }
                 }
@@ -104,10 +107,10 @@ class CallingActivtiy : AppCompatActivity() {
         btnReceive_Call.setOnClickListener {
             OngoingCall.answer()
             startTimer()
+            btnReceive_Call.isVisible = false
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
             tv_Timer.text = getTimeStringFromDouble(time)
         }
-
         btnEndCall.setOnClickListener {
             OngoingCall.hangup()
             stopTimer()
@@ -115,8 +118,8 @@ class CallingActivtiy : AppCompatActivity() {
             btnEndCall.isVisible = false
         }
         ImgHold.setOnClickListener {
-//            OngoingCall.onHold()
-//            Toast.makeText(this, "call is on hold", Toast.LENGTH_SHORT).show()
+            //hold/unHold call
+            holdUnHold()
         }
         ImgMute.setOnClickListener {
             mutePhone()
@@ -136,6 +139,19 @@ class CallingActivtiy : AppCompatActivity() {
             .addTo(disposables)
     }
 
+    private fun holdUnHold() {
+        if (isHold) {
+//            OngoingCall.call!!.hold()
+            OngoingCall.hold()
+            isHold = false
+        } else {
+            OngoingCall.unHold()
+            isHold = true
+            Toast.makeText(this, "unHold", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
     @SuppressLint("SetTextI18n")
     private fun updateUi(state: Int) {
 //        tv_calling.text = "${state}\n${callStatus.toInt()}"
@@ -143,11 +159,15 @@ class CallingActivtiy : AppCompatActivity() {
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
         if (state == Call.STATE_ACTIVE) {
-            startTimer()
             tv_Timer.isVisible = true
+            startTimer()
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
             tv_Timer.text = getTimeStringFromDouble(time)
-
+//            for (i in 1..time.toInt()) {
+//                Log.i(TAG, "updateUi: $i")
+//            }
+        } else if (state == Call.STATE_DISCONNECTED) {
+            stopTimer()
         }
         tv_callingNumber.text = "$number"
 //      btnReceive_Call.isVisible = state == Call.STATE_RINGING
@@ -183,11 +203,13 @@ class CallingActivtiy : AppCompatActivity() {
         serviceIntent.putExtra(TimerService.TIME_EXTRA, time)
         startService(serviceIntent)
         timerStarted = true
+//        Toast.makeText(this, "Timer Started", Toast.LENGTH_SHORT).show()
     }
 
     fun stopTimer() {
         stopService(serviceIntent)
         timerStarted = false
+//        Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show()
     }
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
@@ -209,22 +231,47 @@ class CallingActivtiy : AppCompatActivity() {
     private fun makeTimeString(hour: Int, min: Int, sec: Int): String =
         String.format("%02d:%02d:%02d", hour, min, sec)
 
+//    private fun mutePhone() {
+
     private fun mutePhone() {
-        // permission needed
-        //
-        val audiomanager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audiomanager.ringerMode = AudioManager.RINGER_MODE_SILENT
-        Toast.makeText(this, "call mute", Toast.LENGTH_SHORT).show()
+        val adJustMute: Int
+
+        if (isMute) {
+            adJustMute = AudioManager.ADJUST_TOGGLE_MUTE
+            Toast.makeText(this, "Mic Muted$adJustMute", Toast.LENGTH_SHORT).show()
+            isMute = false
+        } else {
+            adJustMute = AudioManager.ADJUST_UNMUTE
+            Toast.makeText(this, "Mic UnMuted$adJustMute", Toast.LENGTH_SHORT).show()
+            isMute = true
+
+        }
+
     }
 
+
     private fun onSpeaker() {
-        val name = getNameFromPhoneNumber(tv_callingNumber.text.toString())
-        Log.i(TAG, "onSpeaker name is :$name")
-        // permission needed
-        //
-        val audiomanager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audiomanager.ringerMode = AudioManager.ADJUST_RAISE
-        Toast.makeText(this, "call mute", Toast.LENGTH_SHORT).show()
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        if (isMicOn) {
+            isMicOn = false
+            audioManager.mode = AudioManager.MODE_IN_CALL
+            audioManager.mode = AudioManager.MODE_NORMAL
+            Toast.makeText(this, "MicOn", Toast.LENGTH_SHORT).show()
+        } else {
+            isMicOn = true
+            audioManager.mode = AudioManager.MODE_NORMAL
+            audioManager.mode = AudioManager.MODE_IN_CALL
+            Toast.makeText(this, "MicOff", Toast.LENGTH_SHORT).show()
+        }
+        audioManager.isSpeakerphoneOn = isMicOn
+
+
+//        val audioManager: AudioManager? = null
+//        if (audioManager != null) {
+//            audioManager!!.setMode(AudioManager.MODE_IN_CALL)
+//            audioManager.isSpeakerphoneOn = true
+//        }
+
     }
 
     @SuppressLint("Range")
@@ -241,13 +288,21 @@ class CallingActivtiy : AppCompatActivity() {
             val cursor = context.contentResolver.query(uri, projection, null, null, null)
             cursor.use {
                 if (cursor?.moveToFirst() == true) {
-                    return cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.PHONETIC_NAME))
+//                    return cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.PHONETIC_NAME))
 //                    return cursor.getStringValue(ContactsContract.PhoneLookup.DISPLAY_NAME)
                 }
             }
-        } catch (ignored: Exception) {
+        } catch (e: Exception) {
         }
         return number
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 
