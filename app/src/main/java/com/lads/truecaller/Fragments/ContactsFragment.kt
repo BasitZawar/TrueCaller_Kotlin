@@ -40,6 +40,7 @@ class ContactsFragment : Fragment() {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         )
         while (phones!!.moveToNext()) {
+
             val name =
                 phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
             val phoneNumber =
@@ -52,6 +53,7 @@ class ContactsFragment : Fragment() {
 
             val adapter = CustomAdapter(contactModelArrayList!!)
             recyclerView.adapter = adapter
+
         }
         phones.close()
 

@@ -1,5 +1,8 @@
 package com.lads.truecaller.adaptor
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +23,23 @@ class CustomAdapter(private val contactModelArrayList: ArrayList<ContactModel>) 
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val ItemsViewModel = contactModelArrayList[position]
 
-        holder.imageView.setImageResource(R.drawable.ic_launcher_background)
+//        holder.imageView.setImageIcon()
         holder.textView.text = ItemsViewModel.name
         holder.textViewNumber.text = ItemsViewModel.number
+
+        holder.itemView.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val dailIntent = Intent(Intent.ACTION_CALL)
+                dailIntent.data =
+                    Uri.parse("tel:${contactModelArrayList[position].number}")
+                v!!.context.startActivity(dailIntent)
+            }
+        })
     }
+
 
     override fun getItemCount(): Int {
         return contactModelArrayList.size
@@ -37,6 +50,7 @@ class CustomAdapter(private val contactModelArrayList: ArrayList<ContactModel>) 
         val textView: TextView = itemView.findViewById(R.id.textView)
         val textViewNumber: TextView = itemView.findViewById(R.id.textView_number)
     }
+
 }
 
 

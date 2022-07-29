@@ -1,6 +1,8 @@
 package com.lads.truecaller.Fragments
 
+import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.LayoutInflater
@@ -10,19 +12,19 @@ import android.widget.ListView
 import android.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import com.lads.truecaller.R
+import kotlinx.android.synthetic.main.itemview_layout_favorite_contacts.view.*
 
 
 class FavouriteFragment : Fragment() {
     private lateinit var listViewFavoriteContacts: ListView
+    var selection = ContactsContract.Contacts.STARRED + "='1'"
+
     var projection = arrayOf(
         ContactsContract.Contacts._ID,
         ContactsContract.Contacts.DISPLAY_NAME,
-        ContactsContract.Contacts.STARRED
+        ContactsContract.Contacts.STARRED,
+//        CallLog.Calls.NUMBER
     )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,19 +38,14 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun displayFavoriteContacts() {
-
         val to =
-            intArrayOf(R.id.recentContactNumber, R.id.recentContactName)
-
-
+            intArrayOf(R.id.tv_RecentContactNumber, R.id.tv_RecentContactName)
         val cursor: Cursor = requireActivity().managedQuery(
             ContactsContract.Contacts.CONTENT_URI,
             projection,
-            "starred=?",
-            arrayOf("1"),
-            "${ContactsContract.Contacts.STARRED} DESC"
+            selection,
+            null, null
         )
-
 
         var adapter = SimpleCursorAdapter(
             context,
@@ -59,7 +56,12 @@ class FavouriteFragment : Fragment() {
             0
         )
         listViewFavoriteContacts.adapter = adapter
-    }
+        listViewFavoriteContacts.setOnItemClickListener { parent, view, position, id ->
+            val dailIntent = Intent(Intent.ACTION_CALL)
+            dailIntent.data =
+                Uri.parse("tel:${view.tv_RecentContactNumber.text}")
+            requireView().context.startActivity(dailIntent)
+        }
 
-    companion object {}
+    }
 }

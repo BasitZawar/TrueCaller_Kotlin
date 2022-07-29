@@ -5,8 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.RecentFragment">
 
-    <ListView
-        android:id="@+id/listViewRecentContacts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <ListView
+            android:id="@+id/listViewRecentContacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rv_recentContactFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:listitem="@layout/cardview_recentcalllog" />-->
 </FrameLayout>
