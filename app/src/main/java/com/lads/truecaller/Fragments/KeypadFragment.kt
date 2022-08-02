@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.lads.truecaller.R
@@ -53,47 +54,62 @@ class KeypadFragment : Fragment() {
             val dailIntent = Intent(Intent.ACTION_CALL)
 //            dailIntent.data = Uri.parse("tel:" + "8344814819")
             dailIntent.data = Uri.parse("tel:" + tv_Calling_Number.text.toString())
-            activity?.startActivity(dailIntent)
+//            activity?.startActivity(dailIntent)
+            startActivity(dailIntent)
         })
         btnClear.setOnClickListener {
-            tv_Calling_Number.text = ""
-            btnClear.isVisible = false
+            newText()
+            if (tv_Calling_Number.text == "") {
+                btnClear.isVisible = false
+            }
         }
         textView1.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView1.tag.toString())
         })
         textView2.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView2.tag.toString())
         })
 
         textView3.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView3.tag.toString())
         })
         textView4.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView4.tag.toString())
         })
         textView5.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView5.tag.toString())
         })
         textView6.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView6.tag.toString())
         })
         textView7.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView7.tag.toString())
         })
         textView8.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView8.tag.toString())
         })
         textView9.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView9.tag.toString())
         })
         textView0.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textView0.tag.toString())
         })
         textViewStar.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textViewStar.tag.toString())
         })
         textViewHash.setOnClickListener(View.OnClickListener {
+            valueLimit()
             updateText(textViewHash.tag.toString())
 
         })
@@ -105,6 +121,23 @@ class KeypadFragment : Fragment() {
     fun updateText(newValue: String) {
         tv_Calling_Number.text = "" + tv_Calling_Number.text + newValue
         btnClear.isVisible = true
+    }
+
+    fun valueLimit() {
+        if (tv_Calling_Number.length() == 13) {
+            Toast.makeText(context, "Max length reached", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun newText() {
+        if (tv_Calling_Number.length() > 0) {
+            val string1 = tv_Calling_Number.text.toString()
+            val string = tv_Calling_Number.text.substring(0, (string1.length - 1))
+            tv_Calling_Number.setText(string)
+//            updateText(string)
+            btnClear.isVisible = true
+
+        }
     }
 
 }

@@ -1,11 +1,17 @@
 package com.lads.truecaller.activities
 
 import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
@@ -19,6 +25,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.lads.truecaller.OngoingCall
+import com.lads.truecaller.OngoingCall.call
+import com.lads.truecaller.R
 import com.lads.truecaller.TimerService
 import com.lads.truecaller.asString
 import com.lads.truecaller.interfaces.ApiInterface
@@ -37,7 +45,7 @@ import kotlin.math.roundToInt
 
 class CallingActivtiy : AppCompatActivity() {
     private val disposables = CompositeDisposable()
-    private lateinit var number: String
+    private var number: String? = null
     private lateinit var context: Context
     private var myStringBuilder = StringBuilder()
     private var dialog: AlertDialog? = null
@@ -48,21 +56,29 @@ class CallingActivtiy : AppCompatActivity() {
     private lateinit var serviceIntent: Intent
     private var time = 0.0
 
+    lateinit var notificationChannel: NotificationChannel
+    lateinit var notificationManager: NotificationManager
+    lateinit var builder: Notification.Builder
+    private val channelId = "12345"
+    private val description = "Test Notification"
+
     //    val BASE_URL = "https://jsonplaceholder.typicode.com/"
     val BASE_URL = "https://jsonplaceholder.typicode.com/"
-
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.lads.truecaller.R.layout.activity_calling_activtiy)
-        number = intent.data!!.schemeSpecificPart
+        setContentView(R.layout.activity_calling_activtiy)
+//        number = findViewById<TextView>(R.id.tv_callingNumber).toString()
+        number = intent.data?.schemeSpecificPart
         tv_Timer.isVisible = false
+        showNotification()
 
         serviceIntent = Intent(applicationContext, TimerService::class.java)
         registerReceiver(updateTime, IntentFilter(TimerService.TIMER_UPDATED))
 //        getMyData()
     }
+
 
     private fun getMyData() {
         val retrofitBuilder = Retrofit.Builder()
@@ -127,6 +143,10 @@ class CallingActivtiy : AppCompatActivity() {
         ImgAudio.setOnClickListener {
             onSpeaker()
         }
+        ImgAddCall.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            startActivity(intent)
+        }
         OngoingCall.state
             .subscribe(::updateUi)
             .addTo(disposables)
@@ -140,14 +160,16 @@ class CallingActivtiy : AppCompatActivity() {
     }
 
     private fun holdUnHold() {
-        if (isHold) {
-//            OngoingCall.call!!.hold()
+        if (!isHold) {
+//            call!!.hold()
             OngoingCall.hold()
-            isHold = false
+            Toast.makeText(this, "Hold", Toast.LENGTH_SHORT).show()
+            isHold = true
+
         } else {
             OngoingCall.unHold()
-            isHold = true
             Toast.makeText(this, "unHold", Toast.LENGTH_SHORT).show()
+            isHold = false
         }
 
     }
@@ -161,6 +183,8 @@ class CallingActivtiy : AppCompatActivity() {
         if (state == Call.STATE_ACTIVE) {
             tv_Timer.isVisible = true
             startTimer()
+//            startStopTimer()
+
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
             tv_Timer.text = getTimeStringFromDouble(time)
 //            for (i in 1..time.toInt()) {
@@ -168,7 +192,11 @@ class CallingActivtiy : AppCompatActivity() {
 //            }
         } else if (state == Call.STATE_DISCONNECTED) {
             stopTimer()
+//            startStopTimer()
         }
+//        else if (state == Call.STATE_RINGING) {
+//            tv_callingNumber.text = "Alerting"
+//        }
         tv_callingNumber.text = "$number"
 //      btnReceive_Call.isVisible = state == Call.STATE_RINGING
 //        btnEndCall.isVisible = state in listOf(
@@ -186,10 +214,22 @@ class CallingActivtiy : AppCompatActivity() {
     companion object {
         fun start(context: Context, call: Call) {
             Intent(context, CallingActivtiy::class.java)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .setData(call.details.handle)
                 .let(context::startActivity)
         }
+
+        fun getStartIntent(context: Context): Intent {
+            val openAppIntent = Intent(context, CallingActivtiy::class.java)
+            openAppIntent.flags =
+                Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            openAppIntent.setData(call?.details?.handle)
+            openAppIntent.let {
+                context::class.java
+            }
+            return openAppIntent
+        }
+
     }
 
     private fun startStopTimer() {
@@ -199,14 +239,14 @@ class CallingActivtiy : AppCompatActivity() {
             startTimer()
     }
 
-    fun startTimer() {
+    private fun startTimer() {
         serviceIntent.putExtra(TimerService.TIME_EXTRA, time)
         startService(serviceIntent)
         timerStarted = true
 //        Toast.makeText(this, "Timer Started", Toast.LENGTH_SHORT).show()
     }
 
-    fun stopTimer() {
+    private fun stopTimer() {
         stopService(serviceIntent)
         timerStarted = false
 //        Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show()
@@ -231,47 +271,23 @@ class CallingActivtiy : AppCompatActivity() {
     private fun makeTimeString(hour: Int, min: Int, sec: Int): String =
         String.format("%02d:%02d:%02d", hour, min, sec)
 
-//    private fun mutePhone() {
-
     private fun mutePhone() {
-        val adJustMute: Int
-
-        if (isMute) {
-            adJustMute = AudioManager.ADJUST_TOGGLE_MUTE
-            Toast.makeText(this, "Mic Muted$adJustMute", Toast.LENGTH_SHORT).show()
-            isMute = false
-        } else {
-            adJustMute = AudioManager.ADJUST_UNMUTE
-            Toast.makeText(this, "Mic UnMuted$adJustMute", Toast.LENGTH_SHORT).show()
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        if (!isMute) {
+            audioManager.isStreamMute(AudioManager.MODE_CALL_SCREENING)
+//            audioManager.adjustVolume(AudioManager.ADJUST_MUTE, AudioManager.FLAG_PLAY_SOUND)
+            Toast.makeText(this, "Mic Muted", Toast.LENGTH_SHORT).show()
             isMute = true
-
+        } else {
+            audioManager.adjustVolume(AudioManager.ADJUST_UNMUTE, AudioManager.FLAG_SHOW_UI)
+            Toast.makeText(this, "Mic UnMuted", Toast.LENGTH_SHORT).show()
+            isMute = false
         }
-
     }
 
-
     private fun onSpeaker() {
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        if (isMicOn) {
-            isMicOn = false
-            audioManager.mode = AudioManager.MODE_IN_CALL
-            audioManager.mode = AudioManager.MODE_NORMAL
-            Toast.makeText(this, "MicOn", Toast.LENGTH_SHORT).show()
-        } else {
-            isMicOn = true
-            audioManager.mode = AudioManager.MODE_NORMAL
-            audioManager.mode = AudioManager.MODE_IN_CALL
-            Toast.makeText(this, "MicOff", Toast.LENGTH_SHORT).show()
-        }
-        audioManager.isSpeakerphoneOn = isMicOn
-
-
-//        val audioManager: AudioManager? = null
-//        if (audioManager != null) {
-//            audioManager!!.setMode(AudioManager.MODE_IN_CALL)
-//            audioManager.isSpeakerphoneOn = true
-//        }
-
+        val audioManager: AudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        audioManager.ringerMode = AudioManager.ADJUST_TOGGLE_MUTE
     }
 
     @SuppressLint("Range")
@@ -298,13 +314,71 @@ class CallingActivtiy : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+//        showNotification()
         super.onDestroy()
     }
 
     override fun onResume() {
+//        showNotification()
         super.onResume()
+
     }
 
+//    private fun createNotifChannel() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(
+//                CHANNEL_ID,
+//                CHANNEL_NAME,
+//                NotificationManager.IMPORTANCE_DEFAULT
+//            ).apply {
+//                lightColor = Color.BLUE
+//                enableLights(true)
+//            }
+//            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//            manager.createNotificationChannel(channel)
+//        }
+//    }
 
+
+    private fun showNotification() {
+        if (intent.action === "END_CALL") {
+            OngoingCall.hangup()
+        }
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as
+                NotificationManager
+        val intent = Intent(this, CallingActivtiy::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+        intent.action = Intent.ACTION_MAIN
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        intent.action = "END_CALL"
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel =
+                NotificationChannel(
+                    channelId,
+                    description,
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+            notificationChannel.lightColor = Color.BLUE
+            notificationChannel.enableVibration(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+            builder = Notification.Builder(this, channelId).setContentTitle(
+                "TrueCaller"
+            )
+                .setContentText(number)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .addAction(android.R.drawable.ic_media_pause, "End Call", pendingIntent)
+                .setLargeIcon(
+                    BitmapFactory.decodeResource(
+                        this.resources, R.drawable
+                            .ic_launcher_background
+                    )
+                ).setContentIntent(pendingIntent)
+        }
+        notificationManager.notify(12345, builder.build())
+
+    }
 }
+
 
