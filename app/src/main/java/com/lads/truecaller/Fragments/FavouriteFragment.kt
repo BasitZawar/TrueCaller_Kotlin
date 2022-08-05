@@ -19,9 +19,9 @@ class FavouriteFragment : Fragment() {
     private lateinit var listViewFavoriteContacts: ListView
     var selection = ContactsContract.Contacts.STARRED + "='1'"
 
-    var projection = arrayOf(
-        ContactsContract.Contacts._ID,
+    private var projection = arrayOf(
         ContactsContract.Contacts.DISPLAY_NAME,
+        ContactsContract.Contacts._ID,
         ContactsContract.Contacts.STARRED,
 //        CallLog.Calls.NUMBER
     )
@@ -39,7 +39,7 @@ class FavouriteFragment : Fragment() {
 
     private fun displayFavoriteContacts() {
         val to =
-            intArrayOf(R.id.tv_RecentContactNumber, R.id.tv_RecentContactName)
+            intArrayOf(R.id.tv_RecentContactName, R.id.tv_RecentContactNumber)
         val cursor: Cursor = requireActivity().managedQuery(
             ContactsContract.Contacts.CONTENT_URI,
             projection,
@@ -47,7 +47,7 @@ class FavouriteFragment : Fragment() {
             null, null
         )
 
-        var adapter = SimpleCursorAdapter(
+        val adapter = SimpleCursorAdapter(
             context,
             R.layout.itemview_layout_favorite_contacts,
             cursor,

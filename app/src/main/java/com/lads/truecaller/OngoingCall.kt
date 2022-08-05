@@ -1,12 +1,14 @@
 package com.lads.truecaller
 
 import android.telecom.Call
+import android.telecom.InCallService
 import android.telecom.VideoProfile
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
 object OngoingCall {
     val state: BehaviorSubject<Int> = BehaviorSubject.create()
+    var inCallService: InCallService? = null
 
     private val callback = object : Call.Callback() {
         override fun onStateChanged(call: Call, newState: Int) {
@@ -26,18 +28,19 @@ object OngoingCall {
         }
 
     fun answer() {
-        call!!.answer(VideoProfile.STATE_AUDIO_ONLY)
+        call?.answer(VideoProfile.STATE_AUDIO_ONLY)
     }
 
     fun hangup() {
-        call!!.disconnect()
+        call?.disconnect()
     }
 
-    fun onHold() {
+    fun hold() {
         call!!.hold()
     }
 
     fun unHold() {
         call!!.unhold()
     }
+
 }

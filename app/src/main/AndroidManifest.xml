@@ -91,16 +91,10 @@
         <receiver
             android:name=".ServiceReceiver"
             android:enabled="true"
-            android:exported="true"
-            tools:ignore="MissingClass">
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.lads.truecaller.receiver" />
-                <action android:name="android.intent.action.PHONE_STATE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="com.example.truecaller.action.ACCEPT_CALL" />
+                <action android:name="com.example.truecaller.action.DECLINE_CALL" />
             </intent-filter>
         </receiver>
     </application>

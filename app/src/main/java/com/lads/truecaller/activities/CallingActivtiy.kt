@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -18,6 +19,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.telecom.Call
+import android.telecom.CallAudioState
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -52,7 +54,7 @@ class CallingActivtiy : AppCompatActivity() {
     private var timerStarted = false
     private var isMute = false
     private var isHold = false
-    private var isMicOn = false
+    private var isSpeakerOn = true
     private lateinit var serviceIntent: Intent
     private var time = 0.0
 
@@ -61,6 +63,12 @@ class CallingActivtiy : AppCompatActivity() {
     lateinit var builder: Notification.Builder
     private val channelId = "12345"
     private val description = "Test Notification"
+    private var audioManager: AudioManager? = null
+
+    val openAppIntent = CallingActivtiy.getStartIntent(this)
+    val openAppPendingIntent =
+        PendingIntent.getActivity(context, 0, openAppIntent, FLAG_IMMUTABLE)
+
 
     //    val BASE_URL = "https://jsonplaceholder.typicode.com/"
     val BASE_URL = "https://jsonplaceholder.typicode.com/"
@@ -72,7 +80,11 @@ class CallingActivtiy : AppCompatActivity() {
 //        number = findViewById<TextView>(R.id.tv_callingNumber).toString()
         number = intent.data?.schemeSpecificPart
         tv_Timer.isVisible = false
+
         showNotification()
+//         val audioManager: AudioManager =
+//            getSystemService(Context.AUDIO_SERVICE) as AudioManager
+//        audioManager.setMode(AudioManager.MODE_IN_CALL)
 
         serviceIntent = Intent(applicationContext, TimerService::class.java)
         registerReceiver(updateTime, IntentFilter(TimerService.TIMER_UPDATED))
@@ -97,8 +109,6 @@ class CallingActivtiy : AppCompatActivity() {
 //                 myStringBuilder = StringBuilder()
                 val responseBody = response.body()
                 if (responseBody != null) {
-
-
                     for (myData in responseBody) {
                         myStringBuilder!!.append(+myData.id)
 //                        myStringBuilder.append("userId"+myData.userId)
@@ -141,7 +151,8 @@ class CallingActivtiy : AppCompatActivity() {
             mutePhone()
         }
         ImgAudio.setOnClickListener {
-            onSpeaker()
+//            onSpeaker()
+            toggleSpeaker()
         }
         ImgAddCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
@@ -165,13 +176,11 @@ class CallingActivtiy : AppCompatActivity() {
             OngoingCall.hold()
             Toast.makeText(this, "Hold", Toast.LENGTH_SHORT).show()
             isHold = true
-
         } else {
             OngoingCall.unHold()
             Toast.makeText(this, "unHold", Toast.LENGTH_SHORT).show()
             isHold = false
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -215,8 +224,11 @@ class CallingActivtiy : AppCompatActivity() {
         fun start(context: Context, call: Call) {
             Intent(context, CallingActivtiy::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .setData(call.details.handle)
-                .let(context::startActivity)
+                .let(
+                    context::startActivity
+                )
         }
 
         fun getStartIntent(context: Context): Intent {
@@ -285,9 +297,37 @@ class CallingActivtiy : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ResourceType", "UseCompatLoadingForDrawables")
+    private fun toggleSpeaker() {
+        isSpeakerOn = !isSpeakerOn
+        val drawable =
+            if (isSpeakerOn)
+                R.drawable.ic_mic_on else R.drawable.ic_mic_off
+//        toggleSpeaker().setImageDrawable(ContextCompat.getDrawable(this, drawable))
+        ImgAudio.setImageDrawable(getDrawable(drawable))
+        audioManager?.isSpeakerphoneOn = isSpeakerOn
+
+        val newRoute =
+            if (isSpeakerOn) CallAudioState.ROUTE_SPEAKER else CallAudioState.ROUTE_EARPIECE
+
+        OngoingCall.inCallService?.setAudioRoute(newRoute)
+//        textSpeaker.text = getString(if (isSpeakerOn) R.string.speaker_on else R.string.speaker_off)
+    }
+
     private fun onSpeaker() {
-        val audioManager: AudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager.ringerMode = AudioManager.ADJUST_TOGGLE_MUTE
+//        isSpeakerOn = !isSpeakerOn
+
+        audioManager?.isSpeakerphoneOn = isSpeakerOn
+
+        if (!isSpeakerOn) {
+            CallAudioState.ROUTE_SPEAKER
+            Toast.makeText(this, "MicOn", Toast.LENGTH_SHORT).show()
+            isSpeakerOn = true
+        } else {
+            CallAudioState.ROUTE_EARPIECE
+            Toast.makeText(this, "MicOff", Toast.LENGTH_SHORT).show()
+            isSpeakerOn = false
+        }
     }
 
     @SuppressLint("Range")
@@ -344,13 +384,23 @@ class CallingActivtiy : AppCompatActivity() {
         if (intent.action === "END_CALL") {
             OngoingCall.hangup()
         }
+
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as
                 NotificationManager
         val intent = Intent(this, CallingActivtiy::class.java)
+
+        val servicePendingIntent = PendingIntent.getService(
+            this,
+            0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
         intent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
         intent.action = Intent.ACTION_MAIN
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
         intent.action = "END_CALL"
+        if (intent.action === "END_CALL") {
+//            OngoingCall.hangup()
+            Toast.makeText(this, "Call Ended", Toast.LENGTH_SHORT).show()
+        }
         val pendingIntent =
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -368,13 +418,15 @@ class CallingActivtiy : AppCompatActivity() {
             )
                 .setContentText(number)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .addAction(android.R.drawable.ic_media_pause, "End Call", pendingIntent)
+                .addAction(android.R.drawable.ic_media_pause, "End Call", servicePendingIntent)
                 .setLargeIcon(
                     BitmapFactory.decodeResource(
                         this.resources, R.drawable
                             .ic_launcher_background
                     )
-                ).setContentIntent(pendingIntent)
+                ).setContentIntent(openAppPendingIntent)
+//                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
         }
         notificationManager.notify(12345, builder.build())
 
