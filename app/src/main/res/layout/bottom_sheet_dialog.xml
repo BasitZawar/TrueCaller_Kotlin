@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="16dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consCalling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_callingNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="14"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consButtonsRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/consCalling">
+
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="1"
+            android:text="1"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="2"
+            android:text="2"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="3"
+            android:text="3"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consButtonsRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/consButtonsRow1">
+
+        <TextView
+            android:id="@+id/tv_4"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="4"
+            android:text="4"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_5"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="5"
+            android:text="5"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_6"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_4"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_6"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="6"
+            android:text="6"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_5"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consButtonsRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/consButtonsRow2">
+
+        <TextView
+            android:id="@+id/tv_7"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="7"
+            android:text="7"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_8"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_8"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="8"
+            android:text="8"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_9"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_7"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_9"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="9"
+            android:text="9"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_8"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consButtonRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/consButtonsRow3">
+
+        <TextView
+            android:id="@+id/tv_star"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="*"
+            android:text="*"
+            android:textColor="@color/black"
+            android:textSize="26dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_0"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_0"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="0"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_hash"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_star"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_hash"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_shape"
+            android:gravity="center"
+            android:tag="#"
+            android:text="#"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_0"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consDial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/consButtonRow4">
+
+        <ImageButton
+            android:id="@+id/btnDial"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_shape2"
+            android:src="@drawable/ic_dial"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:background="@color/grey"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btnDial"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnDial"
+            app:layout_constraintTop_toTopOf="@+id/btnDial" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

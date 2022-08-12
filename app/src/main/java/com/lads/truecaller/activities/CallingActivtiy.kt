@@ -5,7 +5,6 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -21,21 +20,29 @@ import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.CallAudioState
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lads.truecaller.OngoingCall
 import com.lads.truecaller.OngoingCall.call
 import com.lads.truecaller.R
 import com.lads.truecaller.TimerService
 import com.lads.truecaller.asString
+import com.lads.truecaller.databinding.ActivityCallingActivtiyBinding
+import com.lads.truecaller.databinding.BottomSheetDialogBinding
 import com.lads.truecaller.interfaces.ApiInterface
 import com.lads.truecaller.model.ApiDataItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_calling_activtiy.*
+import kotlinx.android.synthetic.main.activity_calling_activtiy.tv_callingNumber
+import kotlinx.android.synthetic.main.keypad.*
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -46,6 +53,8 @@ import kotlin.math.roundToInt
 
 
 class CallingActivtiy : AppCompatActivity() {
+    private lateinit var binding: ActivityCallingActivtiyBinding
+
     private val disposables = CompositeDisposable()
     private var number: String? = null
     private lateinit var context: Context
@@ -54,20 +63,21 @@ class CallingActivtiy : AppCompatActivity() {
     private var timerStarted = false
     private var isMute = false
     private var isHold = false
-    private var isSpeakerOn = true
+    private var isSpeakerOn = false
     private lateinit var serviceIntent: Intent
     private var time = 0.0
-
+    private var btnDial: ImageButton? = null
     lateinit var notificationChannel: NotificationChannel
     lateinit var notificationManager: NotificationManager
     lateinit var builder: Notification.Builder
     private val channelId = "12345"
     private val description = "Test Notification"
     private var audioManager: AudioManager? = null
+    lateinit var bottomSheet: BottomSheetDialog
 
-    val openAppIntent = CallingActivtiy.getStartIntent(this)
-    val openAppPendingIntent =
-        PendingIntent.getActivity(context, 0, openAppIntent, FLAG_IMMUTABLE)
+//    private val openAppIntent = CallingActivtiy.getStartIntent(this)
+//    private val openAppPendingIntent =
+//        PendingIntent.getActivity(context, 0, openAppIntent, FLAG_IMMUTABLE)
 
 
     //    val BASE_URL = "https://jsonplaceholder.typicode.com/"
@@ -76,7 +86,9 @@ class CallingActivtiy : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calling_activtiy)
+        binding = ActivityCallingActivtiyBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
 //        number = findViewById<TextView>(R.id.tv_callingNumber).toString()
         number = intent.data?.schemeSpecificPart
         tv_Timer.isVisible = false
@@ -158,6 +170,95 @@ class CallingActivtiy : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_DIAL)
             startActivity(intent)
         }
+        ImgKeypad.setOnClickListener {
+
+            bottomSheet = BottomSheetDialog(this)
+            val inflater = LayoutInflater.from(applicationContext)
+            val btn_binding = BottomSheetDialogBinding.inflate(inflater)
+            bottomSheet?.setContentView(btn_binding.root)
+            bottomSheet?.setCancelable(true)
+            fun updateText(newValue: String) {
+                btn_binding.tvCallingNumber.text = "" + btn_binding.tvCallingNumber.text + newValue
+                btn_binding.btnClear.isVisible = true
+            }
+
+            fun valueLimit() {
+                if (btn_binding.tvCallingNumber.length() == 13) {
+                    Toast.makeText(context, "Max length reached", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            fun newText() {
+                if (btn_binding.tvCallingNumber.length() > 0) {
+                    val string1 = btn_binding.tvCallingNumber.text.toString()
+                    val string = btn_binding.tvCallingNumber.text.substring(0, (string1.length - 1))
+                    btn_binding.tvCallingNumber.setText(string)
+//            updateText(string)
+                    btn_binding.btnClear.isVisible = true
+
+                }
+            }
+            btn_binding.tv1.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv1.tag.toString())
+            })
+            btn_binding.tv2.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv2.tag.toString())
+            })
+
+            btn_binding.tv3.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv3.tag.toString())
+            })
+            btn_binding.tv4.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv4.tag.toString())
+            })
+            btn_binding.tv5.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv5.tag.toString())
+            })
+            btn_binding.tv6.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv6.tag.toString())
+            })
+            btn_binding.tv7.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv7.tag.toString())
+            })
+            btn_binding.tv8.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv8.tag.toString())
+            })
+            btn_binding.tv9.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv9.tag.toString())
+            })
+            btn_binding.tv0.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tv0.tag.toString())
+            })
+            btn_binding.tvStar.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tvStar.tag.toString())
+            })
+            btn_binding.tvHash.setOnClickListener(View.OnClickListener {
+                valueLimit()
+                updateText(btn_binding.tvHash.tag.toString())
+            })
+
+            btn_binding.btnClear.setOnClickListener {
+                newText()
+                if (btn_binding.tvCallingNumber.text == "") {
+                    btnClear.isVisible = false
+                }
+            }
+            btn_binding.btnDial.setOnClickListener {
+                Toast.makeText(this, "testing1214", Toast.LENGTH_SHORT).show()
+            }
+            bottomSheet.show()
+        }
         OngoingCall.state
             .subscribe(::updateUi)
             .addTo(disposables)
@@ -219,6 +320,7 @@ class CallingActivtiy : AppCompatActivity() {
         super.onStop()
         disposables.clear()
     }
+
 
     companion object {
         fun start(context: Context, call: Call) {
@@ -303,31 +405,12 @@ class CallingActivtiy : AppCompatActivity() {
         val drawable =
             if (isSpeakerOn)
                 R.drawable.ic_mic_on else R.drawable.ic_mic_off
-//        toggleSpeaker().setImageDrawable(ContextCompat.getDrawable(this, drawable))
         ImgAudio.setImageDrawable(getDrawable(drawable))
         audioManager?.isSpeakerphoneOn = isSpeakerOn
-
         val newRoute =
             if (isSpeakerOn) CallAudioState.ROUTE_SPEAKER else CallAudioState.ROUTE_EARPIECE
-
         OngoingCall.inCallService?.setAudioRoute(newRoute)
-//        textSpeaker.text = getString(if (isSpeakerOn) R.string.speaker_on else R.string.speaker_off)
-    }
-
-    private fun onSpeaker() {
-//        isSpeakerOn = !isSpeakerOn
-
-        audioManager?.isSpeakerphoneOn = isSpeakerOn
-
-        if (!isSpeakerOn) {
-            CallAudioState.ROUTE_SPEAKER
-            Toast.makeText(this, "MicOn", Toast.LENGTH_SHORT).show()
-            isSpeakerOn = true
-        } else {
-            CallAudioState.ROUTE_EARPIECE
-            Toast.makeText(this, "MicOff", Toast.LENGTH_SHORT).show()
-            isSpeakerOn = false
-        }
+//      textSpeaker.text = getString(if (isSpeakerOn) R.string.speaker_on else R.string.speaker_off)
     }
 
     @SuppressLint("Range")
@@ -424,13 +507,15 @@ class CallingActivtiy : AppCompatActivity() {
                         this.resources, R.drawable
                             .ic_launcher_background
                     )
-                ).setContentIntent(openAppPendingIntent)
-//                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
+                )
+//                .setContentIntent(openAppPendingIntent)
+                .setContentIntent(pendingIntent)
         }
         notificationManager.notify(12345, builder.build())
 
     }
+
+
 }
 
 
