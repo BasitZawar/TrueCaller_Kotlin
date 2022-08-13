@@ -47,7 +47,7 @@
                 android:id="@+id/tv_Timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00:00:00"
+                android:text="00:00"
                 android:textColor="@color/white"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -119,7 +119,7 @@
                 android:layout_height="80dp"
                 android:layout_margin="30dp"
                 android:background="@drawable/bg_shape"
-                android:src="@drawable/ic_audio"
+                android:src="@drawable/ic_mic_on"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/ImgKeypad"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -221,9 +221,9 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/consDial"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -234,17 +234,19 @@
                 android:id="@+id/btnEndCall"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_margin="40dp"
                 android:background="@drawable/bg_shape2"
                 android:src="@drawable/ic_dial"
                 app:layout_constraintEnd_toStartOf="@+id/btnReceive_Call"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/btnReceive_Call"
                 app:layout_constraintTop_toTopOf="@+id/btnReceive_Call" />
 
             <ImageButton
                 android:id="@+id/btnReceive_Call"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_margin="40dp"
                 android:background="@drawable/bg_shaperec"
                 android:src="@drawable/ic_dial"
                 app:layout_constraintBottom_toBottomOf="@+id/btnEndCall"
@@ -252,7 +254,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/btnEndCall"
                 app:layout_constraintTop_toTopOf="@+id/btnEndCall" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

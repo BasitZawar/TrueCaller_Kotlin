@@ -29,11 +29,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.lads.truecaller.OngoingCall
+import com.lads.truecaller.*
 import com.lads.truecaller.OngoingCall.call
-import com.lads.truecaller.R
-import com.lads.truecaller.TimerService
-import com.lads.truecaller.asString
 import com.lads.truecaller.databinding.ActivityCallingActivtiyBinding
 import com.lads.truecaller.databinding.BottomSheetDialogBinding
 import com.lads.truecaller.interfaces.ApiInterface
@@ -41,8 +38,6 @@ import com.lads.truecaller.model.ApiDataItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_calling_activtiy.*
-import kotlinx.android.synthetic.main.activity_calling_activtiy.tv_callingNumber
-import kotlinx.android.synthetic.main.keypad.*
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -74,6 +69,7 @@ class CallingActivtiy : AppCompatActivity() {
     private val description = "Test Notification"
     private var audioManager: AudioManager? = null
     lateinit var bottomSheet: BottomSheetDialog
+    private lateinit var pendingIntent2: PendingIntent
 
 //    private val openAppIntent = CallingActivtiy.getStartIntent(this)
 //    private val openAppPendingIntent =
@@ -177,6 +173,8 @@ class CallingActivtiy : AppCompatActivity() {
             val btn_binding = BottomSheetDialogBinding.inflate(inflater)
             bottomSheet?.setContentView(btn_binding.root)
             bottomSheet?.setCancelable(true)
+
+
             fun updateText(newValue: String) {
                 btn_binding.tvCallingNumber.text = "" + btn_binding.tvCallingNumber.text + newValue
                 btn_binding.btnClear.isVisible = true
@@ -194,8 +192,7 @@ class CallingActivtiy : AppCompatActivity() {
                     val string = btn_binding.tvCallingNumber.text.substring(0, (string1.length - 1))
                     btn_binding.tvCallingNumber.setText(string)
 //            updateText(string)
-                    btn_binding.btnClear.isVisible = true
-
+//                    btn_binding.btnClear.isVisible = true
                 }
             }
             btn_binding.tv1.setOnClickListener(View.OnClickListener {
@@ -206,7 +203,6 @@ class CallingActivtiy : AppCompatActivity() {
                 valueLimit()
                 updateText(btn_binding.tv2.tag.toString())
             })
-
             btn_binding.tv3.setOnClickListener(View.OnClickListener {
                 valueLimit()
                 updateText(btn_binding.tv3.tag.toString())
@@ -247,15 +243,17 @@ class CallingActivtiy : AppCompatActivity() {
                 valueLimit()
                 updateText(btn_binding.tvHash.tag.toString())
             })
-
             btn_binding.btnClear.setOnClickListener {
                 newText()
-                if (btn_binding.tvCallingNumber.text == "") {
-                    btnClear.isVisible = false
+                if (btn_binding.tvCallingNumber.length() == 0) {
+                    btn_binding.btnClear.isVisible = false
                 }
             }
             btn_binding.btnDial.setOnClickListener {
-                Toast.makeText(this, "testing1214", Toast.LENGTH_SHORT).show()
+                val dailIntent = Intent(Intent.ACTION_CALL)
+                dailIntent.data = Uri.parse("tel:" + btn_binding.tvCallingNumber.text.toString())
+//              activity?.startActivity(dailIntent)
+                startActivity(dailIntent)
             }
             bottomSheet.show()
         }
@@ -383,7 +381,7 @@ class CallingActivtiy : AppCompatActivity() {
     }
 
     private fun makeTimeString(hour: Int, min: Int, sec: Int): String =
-        String.format("%02d:%02d:%02d", hour, min, sec)
+        String.format("%02d:%02d", min, sec)
 
     private fun mutePhone() {
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
@@ -462,7 +460,6 @@ class CallingActivtiy : AppCompatActivity() {
 //        }
 //    }
 
-
     private fun showNotification() {
         if (intent.action === "END_CALL") {
             OngoingCall.hangup()
@@ -471,6 +468,9 @@ class CallingActivtiy : AppCompatActivity() {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as
                 NotificationManager
         val intent = Intent(this, CallingActivtiy::class.java)
+        val intent2 = Intent(this, ServiceReceiver::class.java)
+        intent2.putExtra("action", "actionName");
+
 
         val servicePendingIntent = PendingIntent.getService(
             this,
@@ -479,13 +479,18 @@ class CallingActivtiy : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
         intent.action = Intent.ACTION_MAIN
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
-        intent.action = "END_CALL"
-        if (intent.action === "END_CALL") {
-//            OngoingCall.hangup()
+//        intent.action = "END_CALL"
+        if (intent.action == "END_CALL") {
+            OngoingCall.hangup()
             Toast.makeText(this, "Call Ended", Toast.LENGTH_SHORT).show()
         }
         val pendingIntent =
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+
+        pendingIntent2 =
+            PendingIntent.getBroadcast(this, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel =
                 NotificationChannel(
@@ -501,7 +506,7 @@ class CallingActivtiy : AppCompatActivity() {
             )
                 .setContentText(number)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .addAction(android.R.drawable.ic_media_pause, "End Call", servicePendingIntent)
+                .addAction(android.R.drawable.ic_media_pause, "END_CALL", pendingIntent2)
                 .setLargeIcon(
                     BitmapFactory.decodeResource(
                         this.resources, R.drawable
@@ -510,9 +515,9 @@ class CallingActivtiy : AppCompatActivity() {
                 )
 //                .setContentIntent(openAppPendingIntent)
                 .setContentIntent(pendingIntent)
+                .setOngoing(true)
         }
         notificationManager.notify(12345, builder.build())
-
     }
 
 
