@@ -11,10 +11,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.lads.truecaller.R
 import com.lads.truecaller.model.ContactModel
+import com.lads.truecaller.model.RecentContactsModel
 
 
-class CustomAdapter(private val contactModelArrayList: ArrayList<ContactModel>) :
-    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class AllContactsCustomAdapter(private var contactModelArrayList: ArrayList<ContactModel>) :
+    RecyclerView.Adapter<AllContactsCustomAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -24,11 +25,11 @@ class CustomAdapter(private val contactModelArrayList: ArrayList<ContactModel>) 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
-        val ItemsViewModel = contactModelArrayList[position]
+        val itemsViewModel = contactModelArrayList[position]
 
-//        holder.imageView.setImageIcon()
-        holder.textView.text = ItemsViewModel.name
-        holder.textViewNumber.text = ItemsViewModel.number
+//        holder.imageView.setImageResource(R.drawable.ic_launcher_background)
+        holder.textView.text = itemsViewModel.name
+        holder.textViewNumber.text = itemsViewModel.number
 
         holder.itemView.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
@@ -40,9 +41,13 @@ class CustomAdapter(private val contactModelArrayList: ArrayList<ContactModel>) 
         })
     }
 
-
     override fun getItemCount(): Int {
         return contactModelArrayList.size
+    }
+
+    fun submitList(mRecentContactArrayList: java.util.ArrayList<ContactModel>) {
+        contactModelArrayList = mRecentContactArrayList
+        notifyDataSetChanged()
     }
 
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
@@ -50,7 +55,6 @@ class CustomAdapter(private val contactModelArrayList: ArrayList<ContactModel>) 
         val textView: TextView = itemView.findViewById(R.id.textView)
         val textViewNumber: TextView = itemView.findViewById(R.id.textView_number)
     }
-
 }
 
 
