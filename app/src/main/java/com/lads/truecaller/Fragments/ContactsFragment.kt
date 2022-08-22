@@ -2,8 +2,10 @@ package com.lads.truecaller.Fragments
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -23,12 +25,14 @@ import java.util.concurrent.Executors
 
 
 class ContactsFragment : Fragment() {
+    private var photoUrl: String? = null
+    private var phoneNumber: String? = null
     private var adapter: AllContactsCustomAdapter? = null
     lateinit var recyclerView: RecyclerView
     private var contactModelArrayList: ArrayList<ContactModel>? = null
-    var map: HashMap<String, Int> = LinkedHashMap()
     lateinit var editText: EditText
     var lastnumber = "0"
+    private var photoId: Int? = null
 
 
     @SuppressLint("UseRequireInsteadOfGet", "Range")
@@ -45,6 +49,7 @@ class ContactsFragment : Fragment() {
         editText = view.findViewById(R.id.allContactSearch_EditText)
 
         contactModelArrayList = ArrayList()
+
         contactModelArrayList!!.clear()
         val cursor = requireActivity().contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -56,30 +61,19 @@ class ContactsFragment : Fragment() {
         while (cursor!!.moveToNext()) {
             val name =
                 cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-            var phoneNumber =
+            phoneNumber =
                 cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                     .trim()
-//            phoneNumber = lastnumber
 
-
-//            if (phoneNumber.equals(lastnumber)) {
-//            } else {
-//                lastnumber = phoneNumber
-//                Log.e("lastnumber ", lastnumber)
-//                val type: Int = cursor.getInt(cursor.getColumnIndex(Phone.TYPE))
-//                when (type) {
-//                    Phone.TYPE_HOME -> Log.e("Not Inserted", "Not inserted")
-//                    Phone.TYPE_WORK -> Log.e("Not Inserted", "Not inserted")
-//                }
-//            }
-
+//            Log.d(TAG, "onCreateView: contact list ---- :${profileImage}")
 
             val contactModel = ContactModel()
             contactModel.name = name
+//            contactModel.imageId = profileImage
             if (phoneNumber != null || phoneNumber != lastnumber) {
-                if ((phoneNumber.startsWith("03") || phoneNumber.startsWith("+") || phoneNumber.startsWith(
+                if ((phoneNumber!!.startsWith("03") || phoneNumber!!.startsWith("+") || phoneNumber!!.startsWith(
                         "92"
-                    ) || phoneNumber.startsWith(
+                    ) || phoneNumber!!.startsWith(
                         "+92"
                     ))
                 ) {
@@ -89,10 +83,19 @@ class ContactsFragment : Fragment() {
             } else {
                 Toast.makeText(context, "$phoneNumber", Toast.LENGTH_SHORT).show()
             }
+            val photo_uri =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
+            if (photo_uri != null) {
+
+                contactModel.image = MediaStore.Images.Media.getBitmap(
+                    requireActivity().contentResolver,
+                    Uri.parse(photo_uri)
+                )
+            }
 
             contactModelArrayList!!.add(contactModel)
 
-            adapter = AllContactsCustomAdapter(contactModelArrayList!!)
+            adapter = context?.let { AllContactsCustomAdapter(contactModelArrayList!!, it) }
             recyclerView.adapter = adapter
         }
         cursor.close()
@@ -164,7 +167,7 @@ class ContactsFragment : Fragment() {
     }
 
 
-//    private fun filter(toString: String) {
+    //    private fun filter(toString: String) {
 //        val allContactsFilteredList: ArrayList<ContactModel> = ArrayList()
 //
 //        for (item in contactModelArrayList!!) {
@@ -176,5 +179,4 @@ class ContactsFragment : Fragment() {
 //
 //        recyclerView.adapter = adapter
 //    }
-
 }
