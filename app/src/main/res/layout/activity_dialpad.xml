@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.DialpadActivity">
+
+    <LinearLayout
+        android:id="@+id/consCalling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_dialingNumber"
+                android:layout_width="@dimen/_220sdp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="14"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/icon_clear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_icon_clear"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    // Linear layout row 1
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButtonsRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/consCalling">
+
+        <LinearLayout
+            android:id="@+id/layout_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_1"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="1"
+                android:text="1"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_2"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="2"
+                android:text="2"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_ABC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="ABC"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_3"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="3"
+                android:text="3"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_DEF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="DEF"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute3"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    //Linear layout row 2
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButtonsRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtonsRow1">
+
+        <LinearLayout
+            android:id="@+id/layout_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_4"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="4"
+                android:text="4"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="GHI"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_5"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="5"
+                android:text="5"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_6"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="JKL"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute2"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute2" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_6"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="6"
+                android:text="6"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="MNO"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute3"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    //Linear layout row 3
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButtonsRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtonsRow2">
+
+        <LinearLayout
+            android:id="@+id/layout_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_7"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="7"
+                android:text="7"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_8"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="PQRS"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_8"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="8"
+                android:text="8"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_9"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_7"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="TUV"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute2"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_9"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="9"
+                android:text="9"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_8"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="WXYZ"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute3"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    //Linear layout row 4
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButtonsRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtonsRow3">
+
+        <LinearLayout
+            android:id="@+id/layout_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_star"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="*"
+                android:text="*"
+                android:textColor="@color/black"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_0"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_0"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="0"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_hash"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_star"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute2"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_hash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_shape_dialpad_button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_hash"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:tag="#"
+                android:text="#"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_0"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/ImgMute3"
+                app:layout_constraintTop_toBottomOf="@+id/ImgMute3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    //Linear layout row 5
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayoutDialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_30sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtonsRow4">
+
+        <ImageView
+            android:id="@+id/icon_dial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_icon_dialbutton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtonsRow4"
+            tools:ignore="NotSibling" />
+
+
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/btnClear"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="60dp"-->
+        <!--            android:background="@color/grey"-->
+        <!--            android:src="@drawable/ic_clear"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@+id/btnDial"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/btnDial"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/btnDial" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

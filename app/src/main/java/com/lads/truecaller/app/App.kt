@@ -1,4 +1,4 @@
-package com.lads.truecaller
+package com.lads.truecaller.app
 
 import android.app.Application
 import timber.log.Timber
