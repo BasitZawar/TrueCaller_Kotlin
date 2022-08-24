@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TrueCaller</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hyperlink"><a href="https://www.geeksforgeeks.org/">Privacy Policy</a></string>
     <string name="hello_blank_fragment">Hello Contacts fragment</string>
+    <string name="accept_and_continue">Accept And Continue</string>
+    <string name="l_rem_ipsum_as_lyde_kada_euerot_posnt_it_krig_pseudobel_polingar_sohet_dip_sk_be_rung_s_triling_mikror_nerar_l_rem_ipsum_as_lyde_kada_eurot_post_it_krig_pseudobel_polingar_sohet_dip_sk_berung_s_triling_mikror_nerar">Lörem ipsum as lyde kada. Euerot posnt it krig pseudobel polingar. Sohet dipäsk be rung, så triling. Mikror nerar, Lörem ipsum as lyde kada. Eurot post it krig pseudobel polingar. Sohet dipäsk berung, så triling. Mikror nerar</string>
 </resources>
