@@ -33,15 +33,19 @@ class AllContactsCustomAdapter(
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val itemsViewModel = contactModelArrayList[position]
 
-//        holder.imageView.setImageResource(itemsViewModel[position)
+//      holder.imageView.setImageResource(itemsViewModel[position)
         holder.textView.text = itemsViewModel.name
         holder.textViewNumber.text = itemsViewModel.number
+
         if (itemsViewModel.image != null) {
             holder.imageView.setImageBitmap(contactModelArrayList[position].image)
         } else {
-            val drawable = TextDrawable.builder()
-                .buildRound("${contactModelArrayList[position].name?.get(0)}", Color.RED)
-            holder.imageView.setImageDrawable(drawable)
+            val drawable1 = TextDrawable.builder()
+                .buildRound(
+                    "${contactModelArrayList[position].name?.get(0)}", Color.RED
+                )
+            holder.imageView.setImageDrawable(drawable1)
+
 //            holder.imageView.setImageDrawable(
 //                ContextCompat.getDrawable(
 //                    context,
