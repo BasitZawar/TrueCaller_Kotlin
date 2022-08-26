@@ -4,17 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.lads.truecaller.PageAdapter
 import com.lads.truecaller.databinding.ActivityRecentBinding
 import com.lads.truecaller.model.RecentContactsModel
+import com.lads.truecaller.model.SearchViewModel
 
 
 class RecentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecentBinding
     private var recentContactArrayList: ArrayList<RecentContactsModel>? = null
+    val searchViewModel: SearchViewModel by viewModels()
+
+//    private fun viewModels(): ReadOnlyProperty<RecentActivity, SearchViewModel> {
+//        return viewModels()
+//    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,35 +49,22 @@ class RecentActivity : AppCompatActivity() {
         }
 
         binding.searchBox.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
             }
 
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.isNullOrBlank()) {
-                    recentContactArrayList?.let {
-//                        adapter!!.submitList(it)
-                    }
-                    return
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                p0?.let {
+                    searchViewModel.searchQuery(it.toString())
                 }
-//                GlobalScope.launch(Dispatchers.Main) {
-//                    recentContactArrayList?.filter {
-//                        it.recentContactName?.lowercase(Locale.getDefault())
-//                            ?.contains(s.toString().lowercase(Locale.getDefault())) == true
-//                    }
-//                        .apply {
-//                            adapter.submitList(this?.toMutableList() as ArrayList<RecentContactsModel>)
-//                        }
-//                }
-                Toast.makeText(applicationContext, s.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0.isNullOrEmpty()) {
+                    searchViewModel.searchQuery("")
+                }
             }
         })
+
     }
 }
