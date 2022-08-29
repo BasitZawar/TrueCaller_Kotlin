@@ -37,6 +37,15 @@
         android:theme="@style/Theme.TrueCaller"
         tools:targetApi="31">
         <activity
+            android:name=".activities.FavouritesContactsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ContactsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RecentActivity"
             android:exported="true">
             <intent-filter>
@@ -77,12 +86,10 @@
         </activity>
         <activity
             android:name=".activities.LauncherActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activities.DialpadActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <service
             android:name=".CallService"
